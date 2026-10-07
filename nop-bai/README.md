@@ -31,8 +31,8 @@ nop-bai/
 - [x] `bao-cao.md` đã điền đủ 3 mục bắt buộc và không vượt quá 1 trang A4
       (469 từ nội dung, nằm trong khoảng 450 - 550 từ).
 - [x] Đã `git push` toàn bộ thư mục `nop-bai/` lên GitHub.
-- [ ] Dán URL repo GitHub vào bài nộp trên **https://vlearn.dev**.
-- [ ] Mở lại URL vừa nộp ở chế độ ẩn danh để chắc chắn repo public và người chấm xem được.
+- [x] Dán URL repo GitHub vào bài nộp trên **https://vlearn.dev**.
+- [x] Mở lại URL vừa nộp ở chế độ ẩn danh để chắc chắn repo public và người chấm xem được.
 
 ---
 
