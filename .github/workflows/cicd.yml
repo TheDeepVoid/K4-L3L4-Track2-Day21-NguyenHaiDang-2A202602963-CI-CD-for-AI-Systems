@@ -108,6 +108,8 @@ jobs:
 
           print(f"Da upload models/model.joblib len azure://{container_name}/artifacts/current/model.joblib")
           PYEOF
+        env:
+          ARTIFACT_BUCKET: ${{ secrets.ARTIFACT_BUCKET }}
 
       - name: Save report as artifact
         uses: actions/upload-artifact@v4
