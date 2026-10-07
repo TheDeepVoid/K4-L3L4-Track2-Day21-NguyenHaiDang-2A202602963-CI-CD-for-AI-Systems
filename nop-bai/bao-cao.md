@@ -13,52 +13,33 @@ HƯỚNG DẪN - đọc rồi XÓA TOÀN BỘ các khối chú thích này sau k
 
 | | |
 |---|---|
-| Họ và tên | ___ |
-| MSSV | ___ |
+| Họ và tên | Nguyễn Hải Đăng |
+| MSSV | 2A202602963 |
 | Lớp / Khóa | K4 |
-| Repo GitHub | https://github.com/___/___ |
-| Ngày nộp | ___ |
+| Repo GitHub | https://github.com/TheDeepVoid/K4-L3L4-Track2-Day21-NguyenHaiDang-2A202602963-CI-CD-for-AI-Systems |
+| Ngày nộp | 07/10/2026 |
 
 ---
 
 ## 1. Bộ Siêu Tham Số Đã Chọn và Lý Do
 
-<!-- Khoảng 120 - 150 từ. Điền kết quả thật từ MLflow UI ở Bước 1, tối thiểu 3 lần chạy. -->
-
 | Lần chạy | n_estimators | learning_rate | max_depth | f1_score | accuracy |
 |---|---|---|---|---|---|
-| 1 | ___ | ___ | ___ | ___ | ___ |
-| 2 | ___ | ___ | ___ | ___ | ___ |
-| 3 | ___ | ___ | ___ | ___ | ___ |
+| 1 | 100 | 0.1 | 3 | 0.7109 | 0.8780 |
+| 2 | 50 | 0.05 | 2 | 0.6051 | 0.8460 |
+| 3 | 200 | 0.1 | 5 | 0.7149 | 0.8740 |
+| 4 | 300 | 0.05 | 3 | 0.7163 | 0.8780 |
+| 5 | 200 | 0.2 | 3 | 0.7032 | 0.8700 |
 
-**Bộ siêu tham số đã chọn:** `n_estimators=___`, `learning_rate=___`, `max_depth=___`.
+**Bộ siêu tham số đã chọn:** `n_estimators=300`, `learning_rate=0.05`, `max_depth=3`.
 
-**Lý do:** ___
-
-<!--
-Trả lời trong phần Lý do:
-  - Vì sao bộ này tốt hơn các bộ còn lại (dựa trên f1_score, không phải accuracy)?
-  - Lần chạy có accuracy cao nhất có trùng với lần có f1_score cao nhất không?
-    Nếu không, điều đó nói lên điều gì?
-  - Bạn quan sát thấy đánh đổi nào giữa n_estimators và learning_rate?
--->
+**Lý do:** Bộ này có f1_score cao nhất trong 5 lần chạy (0,7163) nên được chọn để đi vào Bước 2. Lần chạy 4 và lần chạy 1 có accuracy trùng nhau (0,8780) nhưng f1_score khác nhau (0,7163 so với 0,7109), chứng tỏ accuracy không phân biệt được chất lượng thực của mô hình trên lớp thiểu số. Lần chạy 2 với n_estimators=50, learning_rate=0.05, max_depth=2 chỉ đạt f1 0,6051 và sẽ bị quality gate chặn, cho thấy gradient boosting quá yếu khi số cây ít và quá nông. Quan sát thấy đánh đổi giữa n_estimators và learning_rate: giảm learning_rate xuống 0,05 buộc phải tăng n_estimators lên 300 (lần 4 tốt nhất) trong khi learning_rate=0.2 với cùng 200 cây cho f1 thấp hơn (lần 5) do mỗi cây đóng góp quá mạnh và làm mô hình quá khớp.
 
 ---
 
 ## 2. Vì Sao Ngưỡng Chất Lượng Đặt Trên F1 Chứ Không Phải Accuracy
 
-<!-- Khoảng 120 - 150 từ. -->
-
-___
-
-<!--
-Cần nêu được:
-  - Phân bố lớp của tập dữ liệu (tỷ lệ lớp thu nhập > 50K) và hệ quả của nó.
-  - Accuracy của một mô hình luôn trả lời "thu nhập thấp" là bao nhiêu, vì sao con số
-    đó gây hiểu nhầm.
-  - F1 của lớp dương đo điều gì mà accuracy không đo được.
-  - Vì sao KHÔNG dùng average="weighted" hay average="macro" khi gọi f1_score.
--->
+Tập Adult có phân bố lớp mất cân bằng: chỉ khoảng 24,8% mẫu thuộc lớp thu nhập trên 50K, tức là tỷ lệ lớp xấp xỉ 75/25. Một mô hình không học gì mà luôn trả lời "thu nhập thấp" sẽ đạt accuracy 0,752 — con số trông khá cao nhưng mô hình hoàn toàn vô dụng vì không bắt được một trường hợp thu nhập cao nào, f1_score của lớp dương bằng 0. F1 của lớp dương đo khả năng tìm ra đúng các mẫu thu nhập cao (sự cân bằng giữa độ chính xác và độ phủ của lớp thiểu số), trong khi accuracy chỉ phản ánh tỷ lệ dự đoán đúng chung và bị lớp đa số chi phối. Vì vậy lab này lấy f1_score làm chỉ số quyết định với ngưỡng 0,65. Khi gọi f1_score không dùng average="weighted" hay average="macro" vì hai kiểu trung bình này pha lẫn đóng góp của lớp đa số, làm giá trị bị kéo lên cao và mất ý nghĩa của ngưỡng: một mô hình luôn đoán lớp thấp có weighted F1 khoảng 0,65 dù vô dụng.
 
 ---
 
@@ -68,9 +49,9 @@ Cần nêu được:
 
 | Khó khăn | Nguyên nhân | Cách giải quyết |
 |---|---|---|
-| ___ | ___ | ___ |
-| ___ | ___ | ___ |
-| ___ | ___ | ___ |
+| MLflow báo lỗi ImportError với SQLAlchemy 2.1.3 | MLflow 2.13 không tương thích với bản SQLAlchemy mới hơn 2.0 | Ghim `sqlalchemy==2.0.36` trong requirements.txt |
+| `az vm create` thất bại với SkuNotAvailable ở malaysiawest | Standard_B1s hết chỗ trống trong khu vực Malaysia West | Chuyển sang Standard_B2ats_v2 (size free-tier, còn trống trong khu vực) |
+| Bước Upload model trong pipeline fail với KeyError ARTIFACT_BUCKET | Secret chỉ được nạp vào env của bước Authenticate | Thêm `env: ARTIFACT_BUCKET` vào step Upload model trong workflow |
 
 ---
 
